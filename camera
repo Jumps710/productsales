@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webカメラテスト</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #camera-container {
+            position: relative;
+            width: 640px;
+            height: 480px;
+        }
+
+        #camera-stream {
+            width: 100%;
+            height: 100%;
+            background-color: black;
+        }
+
+        .guide-line {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.5);
+            z-index: 10;
+        }
+
+        .guide-line.horizontal {
+            width: 100%;
+            height: 2px;
+            top: 50%;
+            left: 0;
+        }
+
+        .guide-line.vertical {
+            height: 100%;
+            width: 2px;
+            left: 50%;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="camera-container">
+        <video id="camera-stream" autoplay></video>
+        <div class="guide-line horizontal"></div>
+        <div class="guide-line vertical"></div>
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('camera-stream');
+
+        // カメラを取得してビデオストリームを開始
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+            } catch (err) {
+                console.error('カメラを起動できませんでした:', err);
+            }
+        }
+
+        // ページ読み込み時にカメラを開始
+        window.onload = startCamera;
+    </script>
+
+</body>
+</html>
