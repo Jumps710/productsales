@@ -48,11 +48,11 @@ function handleSubmit(form) {
     const sfdcUrl = form.sfdcUrl.value;
     const opportunityId = extractOpportunityId(sfdcUrl);
 
-    // フォームデータをJSON形式で準備
+    // リクエストに必要なデータを準備
     const formData = {
         companyName: form.companyName.value,
         userName: displayName,
-        userId: userId,
+        userId: userId, // userIdを含める
         product: selectedProducts,
         sfdcUrl: sfdcUrl,
         opportunityId: opportunityId
@@ -71,7 +71,6 @@ function handleSubmit(form) {
         if (data.error) {
             document.getElementById('errorMessage').textContent = data.message;
         } else {
-            // 成功時に「支援依頼の申請が完了しました」というメッセージを表示
             document.getElementById('loadingMessage').textContent = "支援依頼の申請が完了しました";
         }
     })
@@ -81,6 +80,7 @@ function handleSubmit(form) {
         console.error('Error:', error);  // エラーログをコンソールに表示
     });
 }
+
 
 // Salesforce URLからopportunityIdを抽出
 function extractOpportunityId(url) {
