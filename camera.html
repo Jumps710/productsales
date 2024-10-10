@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webカメラテスト</title>
+    <title>写真撮影テスト</title>
     <style>
         body {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
         }
@@ -17,12 +18,21 @@
             position: relative;
             width: 640px;
             height: 480px;
+            background-color: black;
         }
 
         #camera-stream {
             width: 100%;
             height: 100%;
-            background-color: black;
+        }
+
+        #guide-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
         }
 
         .guide-line {
@@ -44,28 +54,84 @@
             left: 50%;
             top: 0;
         }
+
+        canvas {
+            display: none;
+        }
+
+        button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
     <div id="camera-container">
-        <video id="camera-stream" autoplay></video>
-        <div class="guide-line horizontal"></div>
-        <div class="guide-line vertical"></div>
+        <video id="camera-stream" autoplay playsinline></video>
+        <div id="guide-lines">
+            <div class="guide-line horizontal"></div>
+            <div class="guide-line vertical"></div>
+        </div>
     </div>
+    <button id="take-photo">写真を撮る</button>
+    <canvas id="photo-canvas"></canvas>
+    <img id="photo-output" alt="写真">
 
     <script>
         const videoElement = document.getElementById('camera-stream');
+        const canvasElement = document.getElementById('photo-canvas');
+        const photoOutput = document.getElementById('photo-output');
+        const takePhotoButton = document.getElementById('take-photo');
+        let videoTrack = null;
 
-        // カメラを取得してビデオストリームを開始
+        // カメラを起動して背面カメラをデフォルトに設定
         async function startCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const constraints = {
+                    video: {
+                        facingMode: { exact: "environment" }, // 背面カメラ
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        zoom: true  // ズームサポート
+                    }
+                };
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 videoElement.srcObject = stream;
+                videoTrack = stream.getVideoTracks()[0];
+
+                // ズームが可能か確認
+                if ('zoom' in videoTrack.getCapabilities()) {
+                    videoElement.addEventListener('wheel', handleZoom);
+                }
+
             } catch (err) {
                 console.error('カメラを起動できませんでした:', err);
             }
         }
+
+        // 写真を撮る機能
+        function takePhoto() {
+            const context = canvasElement.getContext('2d');
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+            context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+            const dataUrl = canvasElement.toDataURL('image/png');
+            photoOutput.src = dataUrl;
+            photoOutput.style.display = 'block';
+        }
+
+        // ズームの制御（ホイールでズーム）
+        function handleZoom(event) {
+            const capabilities = videoTrack.getCapabilities();
+            const settings = videoTrack.getSettings();
+            const zoom = settings.zoom || 1;
+            let newZoom = zoom + (event.deltaY > 0 ? -0.1 : 0.1); // ホイールの方向でズームイン・ズームアウト
+            newZoom = Math.max(capabilities.zoom.min, Math.min(capabilities.zoom.max, newZoom));
+            videoTrack.applyConstraints({ advanced: [{ zoom: newZoom }] });
+        }
+
+        // イベントリスナーを追加
+        takePhotoButton.addEventListener('click', takePhoto);
 
         // ページ読み込み時にカメラを開始
         window.onload = startCamera;
