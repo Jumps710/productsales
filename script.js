@@ -47,6 +47,7 @@ window.addEventListener('load', () => {
 });
 
 // フォームの送信処理
+// フォームの送信処理
 function handleSubmit(form) {
     console.log("handleSubmit: フォーム送信処理を開始します。");
     document.getElementById('loadingMessage').textContent = "少しお待ちください...";
@@ -65,13 +66,15 @@ function handleSubmit(form) {
         .map((checkbox) => checkbox.value)
         .join(',');
 
+    const department = form.department.value;  // 部署の選択値を取得
     const sfdcUrl = form.sfdcUrl.value;
     const opportunityId = extractOpportunityId(sfdcUrl);
 
-    console.log("handleSubmit: フォームデータを送信します。選択されたプロダクト:", selectedProducts, "Salesforce URL:", sfdcUrl, "Opportunity ID:", opportunityId);
+    console.log("handleSubmit: フォームデータを送信します。選択されたプロダクト:", selectedProducts, "Salesforce URL:", sfdcUrl, "Opportunity ID:", opportunityId, "部署:", department);
 
     // フォームデータをJSON形式で準備
     const formData = {
+        department: department,  // 部署を追加
         companyName: form.companyName.value,
         userName: displayName,  // 取得したユーザー名
         userId: userId,         // 取得したユーザーID
@@ -104,6 +107,7 @@ function handleSubmit(form) {
         console.error("handleSubmit: fetchリクエスト中にエラーが発生しました。", error);
     });
 }
+
 
 // API Gatewayのエンドポイント
 const apiEndpoint = 'https://00in1sa3eg.execute-api.ap-northeast-1.amazonaws.com/productsales/tossup';
