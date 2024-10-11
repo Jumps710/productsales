@@ -5,7 +5,7 @@ let userId = "";
 const initializeWoff = () => {
     woff
         .init({
-            woffId: "Bv2kAkzN6gcZ0nD0brpMpg"
+            woffId: "RdSc-crgM_WXxb1wA9RrpQ"
         })
         .then(() => {
             console.log("WOFF APIが正常に初期化されました。");
