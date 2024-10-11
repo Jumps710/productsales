@@ -5,93 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Sales支援依頼フォーム</title>
     <style>
-        /* 全体のレイアウト */
+        /* スタイルはここに記載 */
         body {
-            font-family: 'Roboto', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* フォームコンテナ */
-        .form-container {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
             padding: 20px;
-            max-width: 100%;
-            width: 100%;
-            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* レスポンシブレイアウト */
-        @media (min-width: 600px) {
-            .form-container {
-                max-width: 500px;
-            }
-        }
-
-        h1 {
-            font-size: 1.5em;
-            margin-bottom: 1.2em;
-            text-align: center;
-            color: #333;
-        }
-
-        /* ラベルスタイル */
         label {
-            display: block;
-            font-size: 1em;
-            margin-bottom: 8px;
+            font-size: 16px;
             color: #333;
         }
 
-        /* テキスト入力フィールド */
         input[type="text"], input[type="url"] {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 16px;
+            padding: 10px;
+            margin: 10px 0;
+            display: inline-block;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 1em;
-            box-sizing: border-box;
         }
 
-        /* チェックボックススタイル */
-        .checkbox-group {
-            margin-bottom: 16px;
-        }
-
-        .checkbox-group label {
-            font-size: 1em;
-            margin-right: 12px;
-        }
-
-        /* サブミットボタン */
         input[type="submit"] {
             width: 100%;
             background-color: #4CAF50;
             color: white;
             padding: 12px;
-            font-size: 1.1em;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
 
         input[type="submit"]:hover {
             background-color: #45a049;
         }
 
-        /* メッセージ表示領域 */
-        #loadingMessage, #errorMessage {
-            font-size: 1em;
+        .message {
             text-align: center;
-            margin-top: 10px;
+            font-size: 16px;
         }
 
         #loadingMessage {
@@ -101,48 +57,37 @@
         #errorMessage {
             color: red;
         }
-
-        /* モバイル向けメディアクエリ */
-        @media (max-width: 600px) {
-            .form-container {
-                padding: 15px;
-            }
-
-            input[type="submit"] {
-                font-size: 1em;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h1>Product Sales支援依頼フォーム</h1>
-        
-        <form id="registrationForm" onsubmit="event.preventDefault(); handleSubmit(this);">
-            <label for="companyName">会社名:</label>
-            <input type="text" id="companyName" name="companyName" placeholder="会社名を入力してください" required>
 
-            <label for="sfdcUrl">Salesforceの案件詳細URL:</label>
-            <input type="url" id="sfdcUrl" name="sfdcUrl" placeholder="URLを入力してください" required>
+    <h1>Product Sales支援依頼フォーム</h1>
 
-            <label>プロダクト選択:</label>
-            <div class="checkbox-group">
-                <input type="checkbox" name="product" value="LINE WORKS"> LINE WORKS<br>
-                <input type="checkbox" name="product" value="AiCall"> AiCall<br>
-                <input type="checkbox" name="product" value="OCR"> OCR<br>
-                <input type="checkbox" name="product" value="ラジャー"> ラジャー<br>
-                <input type="checkbox" name="product" value="AiNote"> AiNote<br>
-                <input type="checkbox" name="product" value="相談トーク"> 相談トーク<br>
-            </div>
+    <form id="registrationForm" onsubmit="event.preventDefault(); handleSubmit(this);">
+        <label for="companyName">会社名:</label>
+        <input type="text" id="companyName" name="companyName" placeholder="会社名を入力してください" required>
 
-            <input type="submit" value="送信">
-        </form>
+        <label for="sfdcUrl">Salesforceの案件詳細URL:</label>
+        <input type="url" id="sfdcUrl" name="sfdcUrl" placeholder="URLを入力してください" required>
 
-        <div id="loadingMessage"></div>
-        <div id="errorMessage"></div>
-    </div>
+        <label>プロダクト選択:</label>
+        <div class="checkbox-group">
+            <input type="checkbox" name="product" value="LINE WORKS"> LINE WORKS<br>
+            <input type="checkbox" name="product" value="AiCall"> AiCall<br>
+            <input type="checkbox" name="product" value="OCR"> OCR<br>
+            <input type="checkbox" name="product" value="ラジャー"> ラジャー<br>
+            <input type="checkbox" name="product" value="AiNote"> AiNote<br>
+            <input type="checkbox" name="product" value="相談トーク"> 相談トーク<br>
+        </div>
 
-    <script charset="utf-8" src="https://static.worksmobile.net/static/wm/woff/edge/3.6/sdk.js"></script>
+        <input type="submit" value="送信">
+    </form>
+
+    <div id="loadingMessage" class="message"></div>
+    <div id="errorMessage" class="message"></div>
+
+    <script src="https://static.worksmobile.net/static/wm/woff/edge/3.6/sdk.js"></script>
     <script src="script.js"></script>
+    
 </body>
 </html>
