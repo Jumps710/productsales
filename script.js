@@ -2,9 +2,10 @@ let displayName = "";
 let userId = "";
 
 // WOFF初期化処理
-const initializeWoff = (woffId) => {
+const initializeWoff = () => {
     console.log("initializeWoff: WOFF APIの初期化を開始します。");
-
+    
+    // エラー時のメッセージを詳細に表示するためにエラーハンドリングを追加
     try {
         // ユーザーがログインしているか確認
         if (!woff.isLoggedIn()) {
@@ -19,7 +20,7 @@ const initializeWoff = (woffId) => {
             // ログイン済みならばWOFF初期化を実行
             woff
                 .init({
-                    woffId: woffId
+                    woffId: "WyGFfIqqOXlC4uCZIuUFuw"
                 })
                 .then(() => {
                     console.log("initializeWoff: WOFF APIが正常に初期化されました。");
@@ -45,12 +46,8 @@ const initializeWoff = (woffId) => {
     }
 };
 
-// ページロード時にWOFF APIを初期化
-window.addEventListener('load', () => {
-    const woffId = "RdSc-crgM_WXxb1wA9RrpQ";  // 必要なWOFF IDを指定
-    console.log('WOFF_ID: ' + woffId);
-    initializeWoff(woffId);
-});
+// ページ読み込み時にWOFFを初期化
+window.onload = initializeWoff;
 
 // フォームの送信処理
 function handleSubmit(form) {
