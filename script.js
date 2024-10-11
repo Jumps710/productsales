@@ -47,7 +47,7 @@ const initializeWoff = (woffId) => {
 
 // ページロード時にWOFF APIを初期化
 window.addEventListener('load', () => {
-    const woffId = "Bv2kAkzN6gcZ0nD0brpMpg";  // 必要なWOFF IDを指定
+    const woffId = "RdSc-crgM_WXxb1wA9RrpQ";  // 必要なWOFF IDを指定
     console.log('WOFF_ID: ' + woffId);
     initializeWoff(woffId);
 });
