@@ -35,6 +35,21 @@
             pointer-events: none;
         }
 
+        .overlay-button {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* 半透明のボタン */
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
         .guide-line {
             position: absolute;
             background-color: rgba(255, 255, 255, 0.5);
@@ -119,6 +134,15 @@
             photoOutput.src = dataUrl;
             photoOutput.style.display = 'block';
         }
+
+        <div id="camera-container">
+    <video id="camera-stream" autoplay playsinline></video>
+    <div id="guide-lines">
+        <div class="guide-line horizontal"></div>
+        <div class="guide-line vertical"></div>
+    </div>
+    <button id="take-photo" class="overlay-button">撮影</button> <!-- ボタンを重ねる -->
+</div>
 
         // ズームの制御（ホイールでズーム）
         function handleZoom(event) {
