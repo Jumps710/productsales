@@ -1,53 +1,49 @@
 let displayName = "";
 let userId = "";
 
-// WOFF初期化処理
-const initializeWoff = () => {
-    console.log("initializeWoff: WOFF APIの初期化を開始します。");
-    
-    // エラー時のメッセージを詳細に表示するためにエラーハンドリングを追加
-    try {
-        // ユーザーがログインしているか確認
-        if (!woff.isLoggedIn()) {
-            console.log("initializeWoff: ユーザーは未ログインです。ログインページにリダイレクトします。");
-            // ユーザーがログインしていない場合、ログイン処理を実行
-            woff.login({
-                redirectUri: window.location.href  // ログイン後に現在のページにリダイレクト
-            });
-        } else {
-            console.log("initializeWoff: ユーザーはログイン済みです。WOFF APIを初期化します。");
+let woffId = 'WyGFfIqqOXlC4uCZIuUFuw' // lwd-test.by-works.comよう
 
-            // ログイン済みならばWOFF初期化を実行
-            woff
-                .init({
-                    woffId: "WyGFfIqqOXlC4uCZIuUFuw"
-                })
-                .then(() => {
-                    console.log("initializeWoff: WOFF APIが正常に初期化されました。");
 
-                    // プロフィール情報を取得
-                    return woff.getProfile();
-                })
-                .then((profile) => {
-                    if (profile) {
-                        displayName = profile.displayName;
-                        userId = profile.userId;
-                        console.log("initializeWoff: ユーザー名:", displayName, "ユーザーID:", userId);
-                    } else {
-                        console.log("initializeWoff: プロフィール情報が取得できませんでした。");
-                    }
-                })
-                .catch((err) => {
-                    console.error("initializeWoff: WOFF API初期化中にエラーが発生しました:", err);
-                });
-        }
-    } catch (error) {
-        console.error("initializeWoff: エラーが発生しました。", error);
-    }
-};
+window.addEventListener('load', () => {
+    console.log("Window Loaded");
 
-// ページ読み込み時にWOFFを初期化
-window.onload = initializeWoff;
+    woff.init({
+        woffId: woffId // Dev Consoleにて発行された WOFF ID を指定
+    })
+        .then(() => {
+            console.log("WOFF initialization success");
+            // `woff.init` の初期化が成功した後、ログイン状態を確認
+            if (woff.isInClient()) {
+                // インアプリブラウザ内であればログインプロセスをスキップ
+                console.log("In LINE WORKS app, no need to login.");
+                sessionStorage.setItem("loggedIn", "true");
+                return Promise.resolve();
+            } else if (sessionStorage.getItem("loggedIn") === "true") {
+                // セッションストレージにログイン済みのフラグがあれば、ログインプロセスをスキップ
+                console.log("Already logged in, skipping login process.");
+                return Promise.resolve();
+            } else {
+                // 外部ブラウザであり、かつログインしていない場合はログインが必要
+                console.log("Logging in...");
+                return woff.login();
+            }
+        })
+        .then(() => {
+            // ログイン成功、またはログイン不要の場合、プロフィール情報を取得
+            sessionStorage.setItem("loggedIn", "true"); // ログインが成功したことをフラグで示す
+            return woff.getProfile();
+        })
+        .then(profile => {
+            userName = profile.displayName;
+            userId = profile.userId;
+            document.querySelector('.form-title').innerHTML = `${userName}さん、こんにちは！<br><span style="color: green; font-weight: bold;">経費精算</span>を行ってください`;
+            console.log("User's display name:", userName);
+        })
+        .catch((err) => {
+            console.error('Error:', err);
+        });
+});
+
 
 // フォームの送信処理
 function handleSubmit(form) {
