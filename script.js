@@ -18,7 +18,7 @@ const initializeWoff = () => {
         // ログイン済みならばWOFF初期化を実行
         woff
             .init({
-                woffId: "Bv2kAkzN6gcZ0nD0brpMpg"
+                woffId: "RdSc-crgM_WXxb1wA9RrpQ"
             })
             .then(() => {
                 console.log("initializeWoff: WOFF APIが正常に初期化されました。");
