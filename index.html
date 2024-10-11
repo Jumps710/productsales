@@ -107,6 +107,18 @@
         <h1>Product Sales支援依頼フォーム</h1>
         
         <form id="registrationForm" onsubmit="event.preventDefault(); handleSubmit(this);">
+
+                <label for="department">あなたの部署:</label>
+    <select id="department" name="department" required>
+        <option value="">部署を選択してください</option>
+        <option value="IDS1">IDS1</option>
+        <option value="IDS2">IDS2</option>
+        <option value="IDS3">IDS3</option>
+        <option value="IDS4">IDS4</option>
+        <option value="ODS">ODS</option>
+        <option value="PartnerSales">PartnerSales</option>
+    </select>
+            
             <label for="companyName">会社名:</label>
             <input type="text" id="companyName" name="companyName" placeholder="会社名を入力してください" required>
 
