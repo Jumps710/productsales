@@ -3,24 +3,18 @@ let userId = "";
 
 // WOFF初期化処理
 const initializeWoff = () => {
-    // WOFFブラウザ内で実行されているか確認
-    if (!woff.isInClient()) {
-        alert("この機能はLINE WORKSアプリ内でのみ使用できます。");
-        return;
-    }
-
     // ユーザーがログインしているか確認
     if (!woff.isLoggedIn()) {
         console.log("ユーザーは未ログインです。ログインページにリダイレクトします。");
         // ユーザーがログインしていない場合、ログイン処理を実行
         woff.login({
-            redirectUri: window.location.href // ログイン後に現在のページにリダイレクト
+            redirectUri: window.location.href  // ログイン後に現在のページにリダイレクト
         });
     } else {
         // ログイン済みならばWOFF初期化を実行
         woff
             .init({
-                woffId: "Bv2kAkzN6gcZ0nD0brpMpg"
+                woffId: "RdSc-crgM_WXxb1wA9RrpQ"
             })
             .then(() => {
                 console.log("WOFF APIが正常に初期化されました。");
