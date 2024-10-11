@@ -3,30 +3,42 @@ let userId = "";
 
 // WOFF初期化処理
 const initializeWoff = () => {
-    woff
-        .init({
-            woffId: "RdSc-crgM_WXxb1wA9RrpQ"
-        })
-        .then(() => {
-            console.log("WOFF APIが正常に初期化されました。");
+    // WOFFブラウザ内で実行されているか確認
+    if (!woff.isInClient()) {
+        alert("この機能はLINE WORKSアプリ内でのみ使用できます。");
+        return;
+    }
 
-            if (!woff.isInClient()) {
-                alert("この機能はLINE WORKSアプリ内でのみ使用できます。");
-                return;
-            }
-
-            return woff.getProfile();
-        })
-        .then((profile) => {
-            if (profile) {
-                displayName = profile.displayName;
-                userId = profile.userId;
-                console.log("取得したユーザー名:", displayName, "取得したユーザーID:", userId);
-            }
-        })
-        .catch((err) => {
-            console.error("WOFF APIの初期化中にエラーが発生しました:", err.code, err.message);
+    // ユーザーがログインしているか確認
+    if (!woff.isLoggedIn()) {
+        console.log("ユーザーは未ログインです。ログインページにリダイレクトします。");
+        // ユーザーがログインしていない場合、ログイン処理を実行
+        woff.login({
+            redirectUri: window.location.href // ログイン後に現在のページにリダイレクト
         });
+    } else {
+        // ログイン済みならばWOFF初期化を実行
+        woff
+            .init({
+                woffId: "Bv2kAkzN6gcZ0nD0brpMpg"
+            })
+            .then(() => {
+                console.log("WOFF APIが正常に初期化されました。");
+
+                // プロフィール情報を取得
+                return woff.getProfile();
+            })
+            .then((profile) => {
+                if (profile) {
+                    displayName = profile.displayName;
+                    userId = profile.userId;
+                    console.log("ユーザー名:", displayName, "ユーザーID:", userId);
+                }
+            })
+            .catch((err) => {
+                console.error("WOFF API初期化中にエラーが発生しました:", err.code, err.message);
+            });
+    }
 };
 
 // ページ読み込み時にWOFFを初期化
