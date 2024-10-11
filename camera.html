@@ -24,6 +24,7 @@
         #camera-stream {
             width: 100%;
             height: 100%;
+            cursor: pointer; /* カメラ映像にカーソルを設定 */
         }
 
         #guide-lines {
@@ -33,20 +34,6 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-        }
-
-        .overlay-button {
-            position: fixed;  /* 固定位置に変更 */
-            top: 20px;        /* 常に画面上部に表示 */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            padding: 10px 20px;
-            background-color: rgba(255, 255, 255, 0.7); /* 半透明のボタン */
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
 
         .guide-line {
@@ -72,6 +59,10 @@
         canvas {
             display: none;
         }
+
+        #photo-output {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -83,7 +74,6 @@
             <div class="guide-line vertical"></div>
         </div>
     </div>
-    <button id="take-photo" class="overlay-button">撮影</button>
     <canvas id="photo-canvas"></canvas>
     <img id="photo-output" alt="写真">
 
@@ -91,9 +81,7 @@
         const videoElement = document.getElementById('camera-stream');
         const canvasElement = document.getElementById('photo-canvas');
         const photoOutput = document.getElementById('photo-output');
-        const takePhotoButton = document.getElementById('take-photo');
         let videoTrack = null;
-        let zoomTimeout;
 
         // カメラを起動して背面カメラをデフォルトに設定
         async function startCamera() {
@@ -139,15 +127,10 @@
             let newZoom = zoom + (event.deltaY > 0 ? -0.1 : 0.1); // ホイールの方向でズームイン・ズームアウト
             newZoom = Math.max(capabilities.zoom.min, Math.min(capabilities.zoom.max, newZoom));
             videoTrack.applyConstraints({ advanced: [{ zoom: newZoom }] });
-
-            // ズーム中はボタンを非表示にする（ここでは必要なし、常に表示される）
-            // takePhotoButton.style.display = 'none';
-
-            // ズーム終了後にボタンを再表示（ズーム操作後のタイムアウト処理も不要）
         }
 
-        // イベントリスナーを追加
-        takePhotoButton.addEventListener('click', takePhoto);
+        // カメラ映像をタップしたら写真を撮る
+        videoElement.addEventListener('click', takePhoto);
 
         // ページ読み込み時にカメラを開始
         window.onload = startCamera;
