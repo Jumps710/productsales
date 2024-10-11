@@ -5,29 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Sales支援依頼フォーム</title>
     <style>
-        /* スタイルはここに記載 */
+        /* Googleフォーム風のシンプルで直感的なUI */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 100%;
+            width: 100%;
+            margin: 20px;
+        }
+
+        @media (min-width: 600px) {
+            .form-container {
+                max-width: 500px;
+            }
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 1.2em;
+            text-align: center;
+            color: #333;
         }
 
         label {
-            font-size: 16px;
+            display: block;
+            font-size: 1em;
+            margin-bottom: 8px;
             color: #333;
         }
 
         input[type="text"], input[type="url"] {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            display: inline-block;
+            padding: 12px;
+            margin-bottom: 16px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group {
+            margin-bottom: 16px;
+        }
+
+        .checkbox-group label {
+            font-size: 1em;
+            margin-right: 12px;
         }
 
         input[type="submit"] {
@@ -35,10 +71,10 @@
             background-color: #4CAF50;
             color: white;
             padding: 12px;
+            font-size: 1.1em;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
         }
 
         input[type="submit"]:hover {
@@ -47,7 +83,7 @@
 
         .message {
             text-align: center;
-            font-size: 16px;
+            font-size: 1em;
         }
 
         #loadingMessage {
@@ -57,37 +93,45 @@
         #errorMessage {
             color: red;
         }
+
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <h1>Product Sales支援依頼フォーム</h1>
+    <div class="form-container">
+        <h1>Product Sales支援依頼フォーム</h1>
+        
+        <form id="registrationForm" onsubmit="event.preventDefault(); handleSubmit(this);">
+            <label for="companyName">会社名:</label>
+            <input type="text" id="companyName" name="companyName" placeholder="会社名を入力してください" required>
 
-    <form id="registrationForm" onsubmit="event.preventDefault(); handleSubmit(this);">
-        <label for="companyName">会社名:</label>
-        <input type="text" id="companyName" name="companyName" placeholder="会社名を入力してください" required>
+            <label for="sfdcUrl">Salesforceの案件詳細URL:</label>
+            <input type="url" id="sfdcUrl" name="sfdcUrl" placeholder="URLを入力してください" required>
 
-        <label for="sfdcUrl">Salesforceの案件詳細URL:</label>
-        <input type="url" id="sfdcUrl" name="sfdcUrl" placeholder="URLを入力してください" required>
+            <label>プロダクト選択:</label>
+            <div class="checkbox-group">
+                <input type="checkbox" name="product" value="LINE WORKS"> LINE WORKS<br>
+                <input type="checkbox" name="product" value="AiCall"> AiCall<br>
+                <input type="checkbox" name="product" value="OCR"> OCR<br>
+                <input type="checkbox" name="product" value="ラジャー"> ラジャー<br>
+                <input type="checkbox" name="product" value="AiNote"> AiNote<br>
+                <input type="checkbox" name="product" value="相談トーク"> 相談トーク<br>
+            </div>
 
-        <label>プロダクト選択:</label>
-        <div class="checkbox-group">
-            <input type="checkbox" name="product" value="LINE WORKS"> LINE WORKS<br>
-            <input type="checkbox" name="product" value="AiCall"> AiCall<br>
-            <input type="checkbox" name="product" value="OCR"> OCR<br>
-            <input type="checkbox" name="product" value="ラジャー"> ラジャー<br>
-            <input type="checkbox" name="product" value="AiNote"> AiNote<br>
-            <input type="checkbox" name="product" value="相談トーク"> 相談トーク<br>
-        </div>
+            <input type="submit" value="送信">
+        </form>
 
-        <input type="submit" value="送信">
-    </form>
-
-    <div id="loadingMessage" class="message"></div>
-    <div id="errorMessage" class="message"></div>
+        <div id="loadingMessage" class="message"></div>
+        <div id="errorMessage" class="message"></div>
+    </div>
 
     <script src="https://static.worksmobile.net/static/wm/woff/edge/3.6/sdk.js"></script>
     <script src="script.js"></script>
-    
+
 </body>
 </html>
