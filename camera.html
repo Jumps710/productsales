@@ -36,8 +36,8 @@
         }
 
         .overlay-button {
-            position: absolute;
-            bottom: 20px;
+            position: fixed;  /* 固定位置に変更 */
+            top: 20px;        /* 常に画面上部に表示 */
             left: 50%;
             transform: translateX(-50%);
             z-index: 20;
@@ -72,10 +72,6 @@
         canvas {
             display: none;
         }
-
-        button {
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
@@ -86,8 +82,8 @@
             <div class="guide-line horizontal"></div>
             <div class="guide-line vertical"></div>
         </div>
-        <button id="take-photo" class="overlay-button">撮影</button>
     </div>
+    <button id="take-photo" class="overlay-button">撮影</button>
     <canvas id="photo-canvas"></canvas>
     <img id="photo-output" alt="写真">
 
@@ -144,14 +140,10 @@
             newZoom = Math.max(capabilities.zoom.min, Math.min(capabilities.zoom.max, newZoom));
             videoTrack.applyConstraints({ advanced: [{ zoom: newZoom }] });
 
-            // ズーム中はボタンを非表示にする
-            takePhotoButton.style.display = 'none';
+            // ズーム中はボタンを非表示にする（ここでは必要なし、常に表示される）
+            // takePhotoButton.style.display = 'none';
 
-            // ズーム終了後にボタンを再表示（1秒後）
-            clearTimeout(zoomTimeout);
-            zoomTimeout = setTimeout(() => {
-                takePhotoButton.style.display = 'block';
-            }, 1000);
+            // ズーム終了後にボタンを再表示（ズーム操作後のタイムアウト処理も不要）
         }
 
         // イベントリスナーを追加
