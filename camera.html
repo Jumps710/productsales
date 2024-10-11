@@ -36,19 +36,18 @@
         }
 
         .overlay-button {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.7); /* 半透明のボタン */
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* 半透明のボタン */
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
         .guide-line {
             position: absolute;
@@ -87,8 +86,8 @@
             <div class="guide-line horizontal"></div>
             <div class="guide-line vertical"></div>
         </div>
+        <button id="take-photo" class="overlay-button">撮影</button>
     </div>
-    <button id="take-photo">写真を撮る</button>
     <canvas id="photo-canvas"></canvas>
     <img id="photo-output" alt="写真">
 
@@ -98,6 +97,7 @@
         const photoOutput = document.getElementById('photo-output');
         const takePhotoButton = document.getElementById('take-photo');
         let videoTrack = null;
+        let zoomTimeout;
 
         // カメラを起動して背面カメラをデフォルトに設定
         async function startCamera() {
@@ -135,15 +135,6 @@
             photoOutput.style.display = 'block';
         }
 
-        <div id="camera-container">
-    <video id="camera-stream" autoplay playsinline></video>
-    <div id="guide-lines">
-        <div class="guide-line horizontal"></div>
-        <div class="guide-line vertical"></div>
-    </div>
-    <button id="take-photo" class="overlay-button">撮影</button> <!-- ボタンを重ねる -->
-</div>
-
         // ズームの制御（ホイールでズーム）
         function handleZoom(event) {
             const capabilities = videoTrack.getCapabilities();
@@ -152,6 +143,15 @@
             let newZoom = zoom + (event.deltaY > 0 ? -0.1 : 0.1); // ホイールの方向でズームイン・ズームアウト
             newZoom = Math.max(capabilities.zoom.min, Math.min(capabilities.zoom.max, newZoom));
             videoTrack.applyConstraints({ advanced: [{ zoom: newZoom }] });
+
+            // ズーム中はボタンを非表示にする
+            takePhotoButton.style.display = 'none';
+
+            // ズーム終了後にボタンを再表示（1秒後）
+            clearTimeout(zoomTimeout);
+            zoomTimeout = setTimeout(() => {
+                takePhotoButton.style.display = 'block';
+            }, 1000);
         }
 
         // イベントリスナーを追加
