@@ -2,47 +2,55 @@ let displayName = "";
 let userId = "";
 
 // WOFF初期化処理
-const initializeWoff = () => {
+const initializeWoff = (woffId) => {
     console.log("initializeWoff: WOFF APIの初期化を開始します。");
-    
-    // ユーザーがログインしているか確認
-    if (!woff.isLoggedIn()) {
-        console.log("initializeWoff: ユーザーは未ログインです。ログインページにリダイレクトします。");
-        // ユーザーがログインしていない場合、ログイン処理を実行
-        woff.login({
-            redirectUri: window.location.href  // ログイン後に現在のページにリダイレクト
-        });
-    } else {
-        console.log("initializeWoff: ユーザーはログイン済みです。WOFF APIを初期化します。");
 
-        // ログイン済みならばWOFF初期化を実行
-        woff
-            .init({
-                woffId: "RdSc-crgM_WXxb1wA9RrpQ"
-            })
-            .then(() => {
-                console.log("initializeWoff: WOFF APIが正常に初期化されました。");
-
-                // プロフィール情報を取得
-                return woff.getProfile();
-            })
-            .then((profile) => {
-                if (profile) {
-                    displayName = profile.displayName;
-                    userId = profile.userId;
-                    console.log("initializeWoff: ユーザー名:", displayName, "ユーザーID:", userId);
-                } else {
-                    console.log("initializeWoff: プロフィール情報が取得できませんでした。");
-                }
-            })
-            .catch((err) => {
-                console.error("initializeWoff: WOFF API初期化中にエラーが発生しました:", err.code, err.message);
+    try {
+        // ユーザーがログインしているか確認
+        if (!woff.isLoggedIn()) {
+            console.log("initializeWoff: ユーザーは未ログインです。ログインページにリダイレクトします。");
+            // ユーザーがログインしていない場合、ログイン処理を実行
+            woff.login({
+                redirectUri: window.location.href  // ログイン後に現在のページにリダイレクト
             });
+        } else {
+            console.log("initializeWoff: ユーザーはログイン済みです。WOFF APIを初期化します。");
+
+            // ログイン済みならばWOFF初期化を実行
+            woff
+                .init({
+                    woffId: woffId
+                })
+                .then(() => {
+                    console.log("initializeWoff: WOFF APIが正常に初期化されました。");
+
+                    // プロフィール情報を取得
+                    return woff.getProfile();
+                })
+                .then((profile) => {
+                    if (profile) {
+                        displayName = profile.displayName;
+                        userId = profile.userId;
+                        console.log("initializeWoff: ユーザー名:", displayName, "ユーザーID:", userId);
+                    } else {
+                        console.log("initializeWoff: プロフィール情報が取得できませんでした。");
+                    }
+                })
+                .catch((err) => {
+                    console.error("initializeWoff: WOFF API初期化中にエラーが発生しました:", err);
+                });
+        }
+    } catch (error) {
+        console.error("initializeWoff: エラーが発生しました。", error);
     }
 };
 
-// ページ読み込み時にWOFFを初期化
-window.onload = initializeWoff;
+// ページロード時にWOFF APIを初期化
+window.addEventListener('load', () => {
+    const woffId = "Bv2kAkzN6gcZ0nD0brpMpg";  // 必要なWOFF IDを指定
+    console.log('WOFF_ID: ' + woffId);
+    initializeWoff(woffId);
+});
 
 // フォームの送信処理
 function handleSubmit(form) {
