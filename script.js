@@ -1,8 +1,7 @@
 let displayName = "";
 let userId = "";
 
-let woffId = 'WyGFfIqqOXlC4uCZIuUFuw' // lwd-test.by-works.comよう
-
+let woffId = 'WyGFfIqqOXlC4uCZIuUFuw'; // lwd-test.by-works.comよう
 
 window.addEventListener('load', () => {
     console.log("Window Loaded");
@@ -34,16 +33,18 @@ window.addEventListener('load', () => {
             return woff.getProfile();
         })
         .then(profile => {
-            userName = profile.displayName;
+            displayName = profile.displayName;  // userNameではなくdisplayNameに代入
             userId = profile.userId;
-            document.querySelector('.form-title').innerHTML = `${userName}さん、こんにちは！<br><span style="color: green; font-weight: bold;">経費精算</span>を行ってください`;
-            console.log("User's display name:", userName);
+            const formTitle = document.querySelector('.form-title');
+            if (formTitle) {
+                formTitle.innerHTML = `${displayName}さん、こんにちは！<br><span style="color: green; font-weight: bold;">経費精算</span>を行ってください`;
+            }
+            console.log("User's display name:", displayName);
         })
         .catch((err) => {
             console.error('Error:', err);
         });
 });
-
 
 // フォームの送信処理
 function handleSubmit(form) {
