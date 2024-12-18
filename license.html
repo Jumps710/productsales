@@ -17,7 +17,7 @@
             display: inline-block;
         }
 
-        video, canvas {
+        video {
             width: 320px;
             height: 180px; /* 16:9 aspect ratio */
             border: 1px solid #ddd;
@@ -41,6 +41,13 @@
         #captured-image {
             display: none;
             margin-top: 20px;
+        }
+
+        img {
+            width: 320px;
+            height: 180px; /* Same as video dimensions */
+            border: 1px solid #ddd;
+            border-radius: 8px;
         }
 
         button {
@@ -80,6 +87,7 @@
         const captureFrame = document.getElementById('capture-frame');
         const captureBtn = document.getElementById('capture-btn');
         const retakeBtn = document.getElementById('retake-btn');
+        const videoContainer = document.getElementById('video-container');
         const capturedImageContainer = document.getElementById('captured-image');
         const capturedPhoto = document.getElementById('captured-photo');
 
@@ -88,9 +96,15 @@
         // Initialize the camera
         async function initCamera() {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: "environment",
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 }
+                    }
+                });
                 cameraStream.srcObject = stream;
-                cameraStream.style.display = 'block';
+                videoContainer.style.display = 'inline-block';
                 capturedImageContainer.style.display = 'none';
                 retakeBtn.style.display = 'none';
                 captureBtn.style.display = 'inline';
@@ -103,21 +117,23 @@
         // Capture the current frame
         function captureFrameImage() {
             const canvas = document.createElement('canvas');
-            canvas.width = cameraStream.videoWidth;
-            canvas.height = cameraStream.videoHeight;
+            canvas.width = 320; // Match the frame size
+            canvas.height = 180; // Match the frame size
             const ctx = canvas.getContext('2d');
             ctx.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
-            const imageData = canvas.toDataURL('image/jpeg');
+            const imageData = canvas.toDataURL('image/jpeg', 1.0); // High-quality JPEG
             capturedPhoto.src = imageData;
+
+            // Toggle visibility
+            videoContainer.style.display = 'none';
             capturedImageContainer.style.display = 'block';
-            cameraStream.style.display = 'none';
             captureBtn.style.display = 'none';
             retakeBtn.style.display = 'inline';
         }
 
         // Retake the image
         function retakeImage() {
-            cameraStream.style.display = 'block';
+            videoContainer.style.display = 'inline-block';
             capturedImageContainer.style.display = 'none';
             captureBtn.style.display = 'inline';
             retakeBtn.style.display = 'none';
