@@ -144,9 +144,9 @@
             try {
                 stream = await navigator.mediaDevices.getUserMedia({
                     video: {
-                        facingMode: "environment",
-                        width: { ideal: 1920 },
-                        height: { ideal: 1080 }
+                        facingMode: "user", // Switch to front camera
+                        width: { max: 3840 }, // Max resolution width
+                        height: { max: 2160 } // Max resolution height
                     }
                 });
                 cameraStream.srcObject = stream;
@@ -163,8 +163,8 @@
         // Capture the current frame
         function captureFrameImage() {
             const canvas = document.createElement('canvas');
-            canvas.width = 1920; // High-resolution width
-            canvas.height = 1080; // High-resolution height
+            canvas.width = 3840; // High-resolution width
+            canvas.height = 2160; // High-resolution height
             const ctx = canvas.getContext('2d');
             ctx.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
 
