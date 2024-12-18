@@ -1,4 +1,4 @@
-54<!DOCTYPE html>
+36<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,33 +12,33 @@
             padding: 0;
         }
 
-#video-container {
-    position: relative;
-    display: inline-block;
-    width: 360px; /* Video container width */
-    height:640px; /* Video container height */
-}
+        #video-container {
+            position: relative;
+            display: inline-block;
+            width: 640px; /* Updated container width */
+            height: 360px; /* Updated container height */
+        }
 
-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%; /* Fit the container */
-    height: 100%; /* Fit the container */
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%; /* Fit the container */
+            height: 100%; /* Fit the container */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
 
-#capture-frame {
-    position: absolute;
-    width: 180px;
-    height: 120px;
-    top: 80%; /* Center vertically */
-    left: 80%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Adjust to center */
-    border: 2px dashed red;
-    pointer-events: none;
-}
+        #capture-frame {
+            position: absolute;
+            width: 250px;
+            height: 150px;
+            top: 70%; /* Center vertically */
+            left: 70%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust to center */
+            border: 2px dashed red;
+            pointer-events: none;
+        }
 
         #controls {
             margin-top: 20px;
@@ -85,7 +85,7 @@ video {
 
     <div id="video-container">
         <video id="camera-stream" autoplay playsinline></video>
-        <canvas id="capture-frame"></canvas>
+        <div id="capture-frame"></div>
     </div>
 
     <div id="controls">
@@ -169,8 +169,10 @@ video {
         // Capture the current frame
         function captureFrameImage() {
             const canvas = document.createElement('canvas');
-            canvas.width = 3840; // High-resolution width
-            canvas.height = 2160; // High-resolution height
+            const videoWidth = cameraStream.videoWidth;
+            const videoHeight = cameraStream.videoHeight;
+            canvas.width = videoWidth;
+            canvas.height = videoHeight;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
 
