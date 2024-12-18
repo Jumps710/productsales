@@ -63,6 +63,8 @@
             background-color: #ddd;
         }
     </style>
+    <!-- WOFF SDK -->
+    <script src="https://static.worksmobile.net/static/wm/woff/edge/3.6/sdk.js"></script>
 </head>
 <body>
     <h1>WebRTC Camera App</h1>
@@ -83,6 +85,50 @@
     </div>
 
     <script>
+        const woffId = 'HoKaa4bONU4mNCq2cn4rLA';
+        let displayName = '';
+        let userId = '';
+
+        // Initialize WOFF
+        window.addEventListener('load', () => {
+            console.log("Window Loaded");
+
+            woff.init({
+                woffId: woffId // Dev Consoleにて発行された WOFF ID を指定
+            })
+                .then(() => {
+                    console.log("WOFF initialization success");
+                    // `woff.init` の初期化が成功した後、ログイン状態を確認
+                    if (woff.isInClient()) {
+                        // インアプリブラウザ内であればログインプロセスをスキップ
+                        console.log("In LINE WORKS app, no need to login.");
+                        sessionStorage.setItem("loggedIn", "true");
+                        return Promise.resolve();
+                    } else if (sessionStorage.getItem("loggedIn") === "true") {
+                        // セッションストレージにログイン済みのフラグがあれば、ログインプロセスをスキップ
+                        console.log("Already logged in, skipping login process.");
+                        return Promise.resolve();
+                    } else {
+                        // 外部ブラウザであり、かつログインしていない場合はログインが必要
+                        console.log("Logging in...");
+                        return woff.login();
+                    }
+                })
+                .then(() => {
+                    // ログイン成功、またはログイン不要の場合、プロフィール情報を取得
+                    sessionStorage.setItem("loggedIn", "true"); // ログインが成功したことをフラグで示す
+                    return woff.getProfile();
+                })
+                .then(profile => {
+                    displayName = profile.displayName;  // userNameではなくdisplayNameに代入
+                    userId = profile.userId;
+                    console.log("User's display name:", displayName);
+                })
+                .catch((err) => {
+                    console.error('Error:', err);
+                });
+        });
+
         const cameraStream = document.getElementById('camera-stream');
         const captureFrame = document.getElementById('capture-frame');
         const captureBtn = document.getElementById('capture-btn');
