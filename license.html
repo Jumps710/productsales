@@ -1,1 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Camera App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        #video-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        video, canvas {
+            width: 320px;
+            height: 240px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        #capture-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 320px;
+            height: 240px;
+            border: 2px dashed red;
+            pointer-events: none;
+        }
+
+        #controls {
+            margin-top: 20px;
+        }
+
+        #captured-image {
+            display: none;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:active {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebRTC Camera App</h1>
+
+    <div id="video-container">
+        <video id="camera-stream" autoplay playsinline></video>
+        <canvas id="capture-frame"></canvas>
+    </div>
+
+    <div id="controls">
+        <button id="capture-btn">Capture</button>
+        <button id="retake-btn" style="display: none;">Retake</button>
+    </div>
+
+    <div id="captured-image">
+        <h2>Captured Image</h2>
+        <img id="captured-photo" alt="Captured Image" />
+    </div>
+
+    <script>
+        const cameraStream = document.getElementById('camera-stream');
+        const captureFrame = document.getElementById('capture-frame');
+        const captureBtn = document.getElementById('capture-btn');
+        const retakeBtn = document.getElementById('retake-btn');
+        const capturedImageContainer = document.getElementById('captured-image');
+        const capturedPhoto = document.getElementById('captured-photo');
+
+        let stream = null;
+
+        // Initialize the camera
+        async function initCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                cameraStream.srcObject = stream;
+                cameraStream.style.display = 'block';
+                capturedImageContainer.style.display = 'none';
+                retakeBtn.style.display = 'none';
+                captureBtn.style.display = 'inline';
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                alert('Unable to access the camera. Please check your device permissions.');
+            }
+        }
+
+        // Capture the current frame
+        function captureFrameImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraStream.videoWidth;
+            canvas.height = cameraStream.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/jpeg');
+            capturedPhoto.src = imageData;
+            capturedImageContainer.style.display = 'block';
+            cameraStream.style.display = 'none';
+            captureBtn.style.display = 'none';
+            retakeBtn.style.display = 'inline';
+        }
+
+        // Retake the image
+        function retakeImage() {
+            cameraStream.style.display = 'block';
+            capturedImageContainer.style.display = 'none';
+            captureBtn.style.display = 'inline';
+            retakeBtn.style.display = 'none';
+        }
+
+        captureBtn.addEventListener('click', captureFrameImage);
+        retakeBtn.addEventListener('click', retakeImage);
+
+        // Start the camera on load
+        window.onload = initCamera;
+    </script>
+</body>
+</html>
 
