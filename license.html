@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+36<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,8 +15,8 @@
         #video-container {
             position: relative;
             display: inline-block;
-            width: 360px; /* Updated container width */
-            height: 640px; /* Updated container height */
+            width: 640px; /* Updated container width */
+            height: 360px; /* Updated container height */
         }
 
         video {
@@ -151,8 +151,8 @@
                 stream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: "user", // Switch to front camera
-                        width: { ideal: 360 }, // Match container width
-                        height: { ideal: 640 } // Match container height
+                        width: { max: 3840 }, // Max resolution width
+                        height: { max: 2160 } // Max resolution height
                     }
                 });
                 cameraStream.srcObject = stream;
@@ -169,8 +169,10 @@
         // Capture the current frame
         function captureFrameImage() {
             const canvas = document.createElement('canvas');
-            canvas.width = 360; // Match video-container width
-            canvas.height = 640; // Match video-container height
+            const videoWidth = cameraStream.videoWidth;
+            const videoHeight = cameraStream.videoHeight;
+            canvas.width = videoWidth;
+            canvas.height = videoHeight;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
 
@@ -180,10 +182,10 @@
 
             // Thumbnail for display
             const thumbnailCanvas = document.createElement('canvas');
-            thumbnailCanvas.width = 250; // Match capture-frame width
-            thumbnailCanvas.height = 150; // Match capture-frame height
+            thumbnailCanvas.width = 320;
+            thumbnailCanvas.height = 180;
             const thumbnailCtx = thumbnailCanvas.getContext('2d');
-            thumbnailCtx.drawImage(canvas, 55, 245, 250, 150, 0, 0, 250, 150); // Adjust to capture-frame
+            thumbnailCtx.drawImage(canvas, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height);
             capturedPhoto.src = thumbnailCanvas.toDataURL('image/jpeg', 0.8); // Compressed thumbnail
 
             // Toggle visibility
