@@ -50,6 +50,14 @@
             border-radius: 8px;
         }
 
+        .full-res-image {
+            width: 100%;
+            max-width: 960px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
         button {
             padding: 10px 20px;
             margin: 5px;
@@ -81,8 +89,8 @@
 
     <div id="captured-image">
         <h2>Captured Image</h2>
-        <img id="captured-photo" alt="Captured Image" />
-        <a id="download-link" href="#" download="captured_image.jpg">Download Full-Resolution Image</a>
+        <img id="captured-photo" alt="Thumbnail Image" />
+        <img id="full-res-photo" class="full-res-image" alt="Full-Resolution Image" />
     </div>
 
     <script>
@@ -127,7 +135,7 @@
         const videoContainer = document.getElementById('video-container');
         const capturedImageContainer = document.getElementById('captured-image');
         const capturedPhoto = document.getElementById('captured-photo');
-        const downloadLink = document.getElementById('download-link');
+        const fullResPhoto = document.getElementById('full-res-photo');
 
         let stream = null;
 
@@ -160,9 +168,9 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
 
-            // Full-resolution image for download
+            // Full-resolution image for display
             const fullResImage = canvas.toDataURL('image/jpeg', 1.0);
-            downloadLink.href = fullResImage;
+            fullResPhoto.src = fullResImage;
 
             // Thumbnail for display
             const thumbnailCanvas = document.createElement('canvas');
