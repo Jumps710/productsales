@@ -82,6 +82,7 @@
     <div id="captured-image">
         <h2>Captured Image</h2>
         <img id="captured-photo" alt="Captured Image" />
+        <a id="download-link" href="#" download="captured_image.jpg">Download Full-Resolution Image</a>
     </div>
 
     <script>
@@ -127,6 +128,7 @@
         const videoContainer = document.getElementById('video-container');
         const capturedImageContainer = document.getElementById('captured-image');
         const capturedPhoto = document.getElementById('captured-photo');
+        const downloadLink = document.getElementById('download-link');
 
         let stream = null;
 
@@ -154,12 +156,22 @@
         // Capture the current frame
         function captureFrameImage() {
             const canvas = document.createElement('canvas');
-            canvas.width = 320; // Match the frame size
-            canvas.height = 180; // Match the frame size
+            canvas.width = 1920; // High-resolution width
+            canvas.height = 1080; // High-resolution height
             const ctx = canvas.getContext('2d');
             ctx.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
-            const imageData = canvas.toDataURL('image/jpeg', 1.0); // High-quality JPEG
-            capturedPhoto.src = imageData;
+
+            // Full-resolution image for download
+            const fullResImage = canvas.toDataURL('image/jpeg', 1.0);
+            downloadLink.href = fullResImage;
+
+            // Thumbnail for display
+            const thumbnailCanvas = document.createElement('canvas');
+            thumbnailCanvas.width = 320;
+            thumbnailCanvas.height = 180;
+            const thumbnailCtx = thumbnailCanvas.getContext('2d');
+            thumbnailCtx.drawImage(canvas, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height);
+            capturedPhoto.src = thumbnailCanvas.toDataURL('image/jpeg', 0.8); // Compressed thumbnail
 
             // Toggle visibility
             videoContainer.style.display = 'none';
