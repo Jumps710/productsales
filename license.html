@@ -67,7 +67,7 @@
     <script src="https://static.worksmobile.net/static/wm/woff/edge/3.6/sdk.js"></script>
 </head>
 <body>
-    <h1>WebRTC Camera App</h1>
+    <h1>OCR免許証てすと</h1>
 
     <div id="video-container">
         <video id="camera-stream" autoplay playsinline></video>
@@ -75,8 +75,8 @@
     </div>
 
     <div id="controls">
-        <button id="capture-btn">Capture</button>
-        <button id="retake-btn" style="display: none;">Retake</button>
+        <button id="capture-btn">撮影</button>
+        <button id="retake-btn" style="display: none;">撮り直す</button>
     </div>
 
     <div id="captured-image">
@@ -110,15 +110,14 @@
                     if (profile) {
                         displayName = profile.displayName;
                         userId = profile.userId;
-                        console.log("取得したユーザー名:", displayName);
                     }
                 })
                 .catch((err) => {
-                    console.error("WOFF APIの初期化中にエラーが発生しました:", err.code, err.message);
+                    console.error("WOFF初期化中にエラーが発生しました:", err.code, err.message);
                 });
         };
 
-        // WOFF初期化の呼び出し
+        // WOFF初期化
         window.addEventListener('load', initializeWoff);
 
         const cameraStream = document.getElementById('camera-stream');
