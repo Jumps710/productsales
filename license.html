@@ -1,9 +1,9 @@
-36<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebRTC Camera App</title>
+    <title>あるろくテスト</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,8 +23,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%; /* Fit the container */
-            height: 100%; /* Fit the container */
+            width: 100%; 
+            height: 100%; 
             border: 1px solid #ddd;
             border-radius: 8px;
         }
@@ -33,9 +33,9 @@
             position: absolute;
             width: 250px;
             height: 150px;
-            top: 70%; /* Center vertically */
-            left: 70%; /* Center horizontally */
-            transform: translate(-50%, -50%); /* Adjust to center */
+            top: 70%; 
+            left: 70%; 
+            transform: translate(-50%, -50%); 
             border: 2px dashed red;
             pointer-events: none;
         }
@@ -51,7 +51,7 @@
 
         img {
             width: 360px;
-            height: 640px; /* Same as video dimensions */
+            height: 640px; 
             border: 1px solid #ddd;
             border-radius: 8px;
         }
@@ -81,7 +81,7 @@
     <script src="https://static.worksmobile.net/static/wm/woff/edge/3.6/sdk.js"></script>
 </head>
 <body>
-    <h1>OCR免許証てすと</h1>
+    <h1>あるろくOCRてすと</h1>
 
     <div id="video-container">
         <video id="camera-stream" autoplay playsinline></video>
@@ -145,7 +145,7 @@
 
         let stream = null;
 
-        // Initialize the camera
+        // カメラ初期化
         async function initCamera() {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({
@@ -166,7 +166,7 @@
             }
         }
 
-        // Capture the current frame
+        // キャプチャ
         function captureFrameImage() {
             const canvas = document.createElement('canvas');
             const videoWidth = cameraStream.videoWidth;
@@ -176,26 +176,26 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
 
-            // Full-resolution image for display
+            // 高解像度の画像をとる
             const fullResImage = canvas.toDataURL('image/jpeg', 1.0);
             fullResPhoto.src = fullResImage;
 
-            // Thumbnail for display
+            // サムネイル画像をとる
             const thumbnailCanvas = document.createElement('canvas');
             thumbnailCanvas.width = 320;
             thumbnailCanvas.height = 180;
             const thumbnailCtx = thumbnailCanvas.getContext('2d');
             thumbnailCtx.drawImage(canvas, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height);
-            capturedPhoto.src = thumbnailCanvas.toDataURL('image/jpeg', 0.8); // Compressed thumbnail
+            capturedPhoto.src = thumbnailCanvas.toDataURL('image/jpeg', 0.8); 
 
-            // Toggle visibility
+            // 撮ったら写真を表示
             videoContainer.style.display = 'none';
             capturedImageContainer.style.display = 'block';
             captureBtn.style.display = 'none';
             retakeBtn.style.display = 'inline';
         }
 
-        // Retake the image
+        // 再撮影
         function retakeImage() {
             videoContainer.style.display = 'inline-block';
             capturedImageContainer.style.display = 'none';
@@ -206,7 +206,6 @@
         captureBtn.addEventListener('click', captureFrameImage);
         retakeBtn.addEventListener('click', retakeImage);
 
-        // Start the camera on load
         window.onload = initCamera;
     </script>
 </body>
